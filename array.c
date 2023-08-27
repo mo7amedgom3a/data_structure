@@ -10,18 +10,19 @@ typedef struct
 } Array;
 
 // function declartion
-Array *createArray(int size);                        // create new array
-int fill(Array *array);                              // fill array
-void display(Array *array);                          // print the array
-int getElement(Array *array, int index);             // get element from array
+Array *createArray(int size);   // create new array
+int fill(Array *array);         // fill array
+void display(Array *array);     // print the array
+int getElement(Array *array, int index); // get element from array
 void setElement(Array *array, int index, int value); // set elemnt in array (override)
-int getSize(Array *array);                           // get the size of array
-int get_length(Array *array);                        // get number of item in array
-int insert(Array *array, int index, int new_item);   // insert item in specific index
-int append(int new_item, Array *array);              // append aitem in the end of array
-Array *Enlarge(Array *array, int new_size);          // update the size of array
-Array *merge(Array *arr1, Array *arr2);              // merge two array in one array
-int search(Array *array, int key);                   // search in array
+int getSize(Array *array);      // get the size of array
+int get_length(Array *array);   // get number of item in array
+int insert(Array *array, int index, int new_item);// insert item in specific index
+int delete(int index, Array *array); // delete index from array
+int append(int new_item, Array *array); // append aitem in the end of array
+Array *Enlarge(Array *array, int new_size); // update the size of array
+Array *merge(Array *arr1, Array *arr2); // merge two array in one array
+int search(Array *array, int key);// search in array
 
 // Function to create a new array
 Array *createArray(int size)
@@ -107,6 +108,22 @@ int insert(Array *array, int index, int new_item)
 
 	return (0);
 }
+
+int delete(int index, Array *array)
+{
+	if (index >= 0 && index < array->size)
+	{
+		for (int i = index; i < array->length - 1; i++)
+		{
+			array->arr[i] = array->arr[i + 1];
+		}
+		array->length--;
+	}
+	else
+		return (-1);
+	return (0);
+}
+
 int append(int new_item, Array *array)
 {
 	if (array->length >= array->size)
