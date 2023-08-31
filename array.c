@@ -110,7 +110,7 @@ int insert(Array *array, int index, int new_item)
 }
 
 int delete(int index, Array *array)
-{
+{ 
 	if (index >= 0 && index < array->size)
 	{
 		for (int i = index; i < array->length - 1; i++)
