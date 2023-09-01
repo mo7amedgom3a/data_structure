@@ -13,7 +13,7 @@ typedef struct
 
 /******************************function declaration*********************************/
 Array2D *createArray2D(int rows, int columns);
-void fill(Array2D *array);
+void fill(Array2D *array); //
 void print(Array2D *array);
 int getValue(Array2D *array, int row, int col);
 void setValue(Array2D *array, int row, int col, int value);
@@ -34,7 +34,7 @@ Array2D *createArray2D(int rows, int columns)
 	Array2D *myarray = malloc(sizeof(Array2D));
 
 	// Allocate memory for the rows and initialize by zero
-	myarray->arr = calloc(rows, sizeof(int *));
+	myarray->arr = calloc(rows, sizeof(int *)); // malloc(rows * sizeof(int *)) = calloc(rows, sizeof(int *))
 
 	// Allocate memory for the columns of each row and initialize by zero
 	for (int i = 0; i < rows; i++)
