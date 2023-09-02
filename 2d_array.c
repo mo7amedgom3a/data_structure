@@ -4,9 +4,9 @@
 // Define the structure for 2D array ADT
 typedef struct
 {
-	int **arr;	// Pointer to the 2D array
-	int rows;	// Number of rows
-	int columns;	// Number of columns
+	int **arr;      // Pointer to the 2D array
+	int rows;       // Number of rows
+	int columns;    // Number of columns
 	int length_row; // The actual number of items in the row
 	int length_col; // The actual number of items in the col
 } Array2D;
@@ -107,9 +107,9 @@ Array2D *Enlarge(Array2D *array, int new_row, int new_col)
 // print the matrix
 void print(Array2D *array)
 {
-	for (int i = 0; i <= array->length_row; i++)
+	for (int i = 0; i < array->rows; i++)
 	{
-		for (int j = 0; j <= array->length_col; j++)
+		for (int j = 0; j < array->columns; j++)
 		{
 			printf(" %d ", array->arr[i][j]);
 		}
@@ -145,7 +145,7 @@ void setValue(Array2D *array, int row, int col, int value)
 // Function to append an element to the end of the 2D array
 int append(int new_item, Array2D *array)
 {
-	if (array->length_row > array->rows || array->length_col > array->columns)
+	if (array->length_row >= array->rows && array->length_col >= array->columns)
 		return -1;
 	// لو أخر عنصر في الاراي فاضي هنضيف العنصر وبعد كدا نطلع
 	if (array->arr[array->length_row][array->length_col] == 0)
@@ -153,65 +153,80 @@ int append(int new_item, Array2D *array)
 		array->arr[array->length_row][array->length_col] = new_item;
 		return 0;
 	}
-	// لو مفيش مكان اضيف العنصر في بداية العمود هضيفه في الصف إلي بعده
-	else if (array->length_col == array->columns || array->length_row < array->rows)
+
+	int flag = array->length_col + 1 == array->columns ? 1 : 0;
+
+	if (flag)
 	{
+		// هنضيف صف جديد
 		array->length_row++;
 		// new row to a dd the element
 		array->arr[array->length_row][0] = new_item;
-
-		// هنصفر الأماكن الباقيه
-		for (int i = 1; i <= array->length_row; i++)
-			array->arr[array->length_row][i] = 0;
 		return (1);
 	}
-	// الحالة التانية لو مفيش مكان اضيف العنصر في بداية الصف هضيفه في العمود إلي بعده
-	if (array->length_row == array->rows || array->length_col < array->columns)
-	{
-		array->length_col++;
-		// new col to add the element
-		array->arr[0][array->length_col] = new_item;
-
-		for (int i = 1; i <= array->length_col; i++)
-			array->arr[i][array->length_col] = 0;
-		return 2;
-	}
+	// هنضيف عمود جديد
+	array->length_col++;
+	// new col to add the element
+	array->arr[0][array->length_col] = new_item;
+	return (2);
 }
 // insert item in spcific index without override the item in this index
 int insert(int new_item, int row, int col, Array2D *arr)
 {
 	int i, j;
-	if (col >= arr->columns || row >= arr->rows)
+	if (col > arr->length_col && row > arr->length_row)
 		return (-1);
 
-	int res = append(0, arr); // هترجع 1 لو ضيفنا الصفر في الصف إلي بعده أو 2 لو ضيفنا الصفر في العمود إلي بعده
+	int res = append(0, arr); // هترجع 1 لو ضيفنا الصفر في صف جديد أو 2 لو ضيفنا الصفر في عمود جديد
 	if (res == 1)
+	{
 		i = arr->length_row, j = 0; // هنمشي من اول العمود إلي في الصف الجديد
-	else if (res == 2)
-		i = 0, j = arr->length_col; // هنمشي من أول الصف إلي في العمود الجديد
-	else
-		return 1;
-	// طالما مش وصلنا للصف إلي فيه العنصر إفضل شغال لغاية ماتجيب الصف ده
-	while (i != row)
-	{
-		if (j == 0) // لو وصلنا لأول عمود في الصف روح علي الصف إلي قبله
-		{
-			arr->arr[i][j] = arr->arr[i - 1][arr->length_col]; // روح علي الصف إلي قبله
-			i--, j = arr->length_col;
-			continue;
-		}
-		// إفضل ماشي لغاية ماتوصل لأول عمود في الصف ده
-		arr->arr[i][j] = arr->arr[i][j - 1];
-		j--;
-	}
-	// تماما وصلنا للصف إلي فيه العنصر هنبدأ نمشي علي كل عمود عشان نوصله
-	while (j != col)
-	{
-		arr->arr[i][j] = arr->arr[i][j - 1], j--;
-	}
-	arr->arr[i][j] = new_item; // insert كدا وصلنا للمكان إلي عاوزين نعمل فيه
 
-	return (0);
+		while (i != row)
+		{
+			if (j == 0) // لو وصلنا لأول عمود في الصف روح علي الصف إلي قبله
+			{
+				arr->arr[i][j] = arr->arr[i - 1][arr->length_col]; // روح علي الصف إلي قبله
+				i--, j = arr->length_col;
+				continue;
+			}
+			// إفضل ماشي لغاية ماتوصل لأول عمود في الصف ده
+			arr->arr[i][j] = arr->arr[i][j - 1];
+			j--;
+		}
+		// تماما وصلنا للصف إلي فيه العنصر هنبدأ نمشي علي كل عمود عشان نوصله
+		while (j != col)
+		{
+			arr->arr[i][j] = arr->arr[i][j - 1], j--;
+		}
+		arr->arr[i][j] = new_item; // insert كدا وصلنا للمكان إلي عاوزين نعمل فيه
+
+		return (0);
+	}
+	else if (res == 2) // في حالة لو ضفنا العنصر في عمود جديد
+	{
+		i = 0, j = arr->length_col; // هنمشي من أول صف في العمود الجديد
+
+		while (j != col) // هنفضل نلوب لغاية مانوصل للعمود إلي عاوزين نحط العنصر فيه
+		{
+			if (i == 0) // لو وصلنا لأول صف في العمود روح علي العمود إلي قبله
+			{
+				arr->arr[i][j] = arr->arr[arr->length_row][j - 1]; // روح علي العمود إلي قبله
+				j--, i = arr->length_row;
+				continue;
+			}
+			// إفضل ماشي لغاية ماتوصل لأول صف في العمود ده
+			arr->arr[i][j] = arr->arr[i - 1][j];
+			i--;
+		}
+		// تماما وصلنا للعمود إلي فيه العنصر هنبدأ نمشي علي كل صف عشان نوصله
+		while (i != row)
+		{
+			arr->arr[i][j] = arr->arr[i - 1][j], i--;
+		}
+		arr->arr[i][j] = new_item; // كدا وصلنا للمكان الحمد الله
+		return 0;
+	}
 }
 // delete item from spacific index
 // بس هنمشي بالعكس  insert نفس ال
@@ -316,13 +331,19 @@ int main()
 	fill(array1);
 	print(array1);
 	printf("\n***************************\n");
+	insert(99, 1, 0, array1);
+	// append(99,array1);
+	print(array1);
+	count(array1);
+	/*
 	Array2D *array2 = createArray2D(4, 4);
 	fill(array2);
 	print(array2);
 	printf("\n");
 	multi_matrix(array1, array2);
+	*/
 	freeArray2D(array1);
-	freeArray2D(array2);
+	// freeArray2D(array2);
 
 	return 0;
 }
