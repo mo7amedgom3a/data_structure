@@ -1,4 +1,5 @@
 #!/bin/bash
 git add .
-git commit -m "test"
+read -p "Enter commit message: " commit_message
+git commit -m "$commit_message"
 git push origin main
