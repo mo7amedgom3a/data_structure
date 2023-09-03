@@ -233,12 +233,13 @@ int insert(int new_item, int row, int col, Array2D *arr)
 int delete(int row, int col, Array2D *arr)
 {
 	int i, j;
-	if (col >= arr->columns || row >= arr->rows)
+	if (col > arr->length_col || row > arr->length_row)
 		return (-1);
-	i = row, j = col;
-	while (i != arr->length_row)
+	i = row, j = col; // إلي عاوزين نحذفه  index هنقف عند ال
+
+	while (i != arr->length_row) // طالما مش وصلنا لأاخر صف أفضل أعمل لووب
 	{
-		if (j == arr->length_col)
+		if (j == arr->length_col) // في كل صف لما توصل لأخر عمود إنزل علي الصف إلي بعده
 		{
 			arr->arr[i][j] = arr->arr[i + 1][0];
 			i++;
@@ -248,13 +249,14 @@ int delete(int row, int col, Array2D *arr)
 		arr->arr[i][j] = arr->arr[i][j + 1];
 		j++;
 	}
+	// تمام كده وصلنا لأخر صف موجود هنمشي بقي علي الأعمده بتاعته
 	j = 0;
 	while (j != arr->length_col)
 	{
 		arr->arr[i][j] = arr->arr[i][j + 1];
 		j++;
 	}
-	arr->arr[i][j] = 0;
+	arr->arr[i][j] = 0; // صفر index حط في اخر
 }
 // matrix multiplication
 void multi_matrix(Array2D *arr1, Array2D *arr2)
