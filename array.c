@@ -4,25 +4,25 @@
 // Define the array ADT structure
 typedef struct
 {
-	int *arr;
-	int size;
-	int length;
+	int *arr;   // Pointer to the array
+	int size;   // Maximum size of the array
+	int length; // Current number of elements in the array
 } Array;
 
-// function declartion
-Array *createArray(int size);   // create new array
-int fill(Array *array);         // fill array
-void display(Array *array);     // print the array
-int getElement(Array *array, int index); // get element from array
-void setElement(Array *array, int index, int value); // set elemnt in array (override)
-int getSize(Array *array);      // get the size of array
-int get_length(Array *array);   // get number of item in array
-int insert(Array *array, int index, int new_item);// insert item in specific index
-int delete(int index, Array *array); // delete index from array
-int append(int new_item, Array *array); // append aitem in the end of array
-Array *Enlarge(Array *array, int new_size); // update the size of array
-Array *merge(Array *arr1, Array *arr2); // merge two array in one array
-int search(Array *array, int key);// search in array
+// Function declarations
+Array *createArray(int size);				// Create a new array
+int fill(Array *array);				 	// Fill the array with user input
+void display(Array *array);				// Print the elements of the array
+int getElement(Array *array, int index);		// Get the element at a specific index
+void setElement(Array *array, int index, int value);	// Set the element at a specific index
+int getSize(Array *array);				// Get the maximum size of the array
+int get_length(Array *array);				// Get the current number of elements in the array
+int insert(Array *array, int index, int new_item);	// Insert an element at a specific index
+int delete(int index, Array *array);			// Delete an element at a specific index
+int append(int new_item, Array *array);			// Append an element to the end of the array
+Array *Enlarge(Array *array, int new_size);		// Increase the size of the array
+Array *merge(Array *arr1, Array *arr2);			// Merge two arrays into one array
+int search(Array *array, int key);			// Search for an element in the array
 
 // Function to create a new array
 Array *createArray(int size)
@@ -33,6 +33,8 @@ Array *createArray(int size)
 	newArray->arr = malloc(size * sizeof(int));
 	return (newArray);
 }
+
+// Function to fill the array with user input
 int fill(Array *array)
 {
 	int no_of_item;
@@ -52,35 +54,45 @@ int fill(Array *array)
 			array->length++;
 		}
 	}
+
+	return (0);
 }
+
+// Function to display the elements of the array
 void display(Array *array)
 {
 	int length = get_length(array);
 
 	for (int i = 0; i < length; i++)
+	{
 		printf("%d ", array->arr[i]);
+	}
 
 	printf("\n");
 }
 
+// Function to get the maximum size of the array
 int getSize(Array *array)
 {
 	return array->size;
 }
 
+// Function to get the current number of elements in the array
 int get_length(Array *array)
 {
-	return (array->length);
+	return array->length;
 }
 
+// Function to get the element at a specific index
 int getElement(Array *array, int index)
 {
 	if (index < 0 || index >= array->size)
 		exit(1);
 
-	return (array->arr[index]);
+	return array->arr[index];
 }
 
+// Function to set the element at a specific index
 void setElement(Array *array, int index, int value)
 {
 	if (index < 0 || index >= array->size)
@@ -88,9 +100,11 @@ void setElement(Array *array, int index, int value)
 		printf("Error: Index out of bounds\n");
 		exit(1);
 	}
+
 	array->arr[index] = value;
 }
 
+// Function to insert an element at a specific index
 int insert(Array *array, int index, int new_item)
 {
 	if (index >= 0 && index < array->size)
@@ -109,8 +123,9 @@ int insert(Array *array, int index, int new_item)
 	return (0);
 }
 
+// Function to delete an element at a specific index
 int delete(int index, Array *array)
-{ 
+{
 	if (index >= 0 && index < array->size)
 	{
 		for (int i = index; i < array->length - 1; i++)
@@ -124,14 +139,18 @@ int delete(int index, Array *array)
 	return (0);
 }
 
+// Function to append an element to the end of the array
 int append(int new_item, Array *array)
 {
 	if (array->length >= array->size)
 		return (-1);
 
 	array->arr[array->length] = new_item;
+
+	return (0);
 }
 
+// Function to increase the size of the array
 Array *Enlarge(Array *array, int new_size)
 {
 
@@ -161,20 +180,11 @@ Array *Enlarge(Array *array, int new_size)
 	}
 	return (array);
 }
-int search(Array *array, int key)
-{
-	for (int i = 0; i < array->length; i++)
-	{
-		if (key == array->arr[i])
-		{
-			return (i);
-		}
-	}
-	return (-1);
-}
+
+// Function to merge two arrays into one array
 Array *merge(Array *arr1, Array *arr2)
 {
-	int new_size = arr1->size + arr2->size;
+int new_size = arr1->size + arr2->size;
 	int *old = arr1->arr;
 
 	arr1->arr = malloc(sizeof(int) * new_size);
@@ -200,56 +210,150 @@ Array *merge(Array *arr1, Array *arr2)
 	return (arr1);
 }
 
-void destroyArray(Array *array)
+// Function to search for an element in the array
+int search(Array *array, int key)
 {
-	free(array->arr);
-	free(array);
+	for (int i = 0; i < array->length; i++)
+	{
+		if (array->arr[i] == key)
+			return i;
+	}
+	return (-1);
 }
 
-// Example usage
 int main()
 {
 	int size;
-	printf("enter the size of array : ");
-	scanf("%d",&size);
-	Array *myArray = createArray(size);
-
-	int n = fill(myArray);
-	if (n == -1)
-		return (1);
-
-	int size = getSize(myArray);
-	printf("Array size: %d\n", size);
-	display(myArray);
-
-	int index, num;
-	printf("enter the index to insert the number ");
-	scanf("%d", &index);
-
-	printf("enter the number to be inserted in this index %d : ",index);
-	scanf("%d",&num);
-	n = insert(myArray, index, num);
-	if (n == -1)
-		printf("faild insert element ");
-	else
-		display(myArray);
-
-	printf("enter the new size to enlarge array");
+	printf("Enter the size of the array: ");
 	scanf("%d", &size);
-	Enlarge(myArray, size);
 
-	printf("new size = %d\n", getSize(myArray));
+	Array *array = createArray(size);
 
-	Array *arr2 = createArray(5);
-	n = fill(arr2);
-	if (n == -1)
-		return (1);
-	myArray = merge(myArray, arr2);
-	display(myArray);
-	printf("size = %d && length = %d \n", getSize(myArray), get_length(myArray));
+	int choice, length;
+	int index, element, new_size;
+	int search_key;
+	int result;
 
-	destroyArray(myArray);
-	destroyArray(arr2);
+	do
+	{
+		printf("\nArray Operations:\n");
+		printf("1. Fill the array\n");
+		printf("2. Display the array\n");
+		printf("3. Get the element at a specific index\n");
+		printf("4. Set the element at a specific index\n");
+		printf("5. Get the size of the array\n");
+		printf("6. Get the current number of elements in the array\n");
+		printf("7. Insert an element at a specific index\n");
+		printf("8. Delete an element at a specific index\n");
+		printf("9. Append an element to the end of the array\n");
+		printf("10. Enlarge the array\n");
+		printf("11. Merge two arrays\n");
+		printf("12. Search for an element in the array\n");
+		printf("0. Exit\n\n");
+		printf("Enter your choice: ");
+		scanf("%d", &choice);
 
-	return 0;
+		switch (choice)
+		{
+		case 1:
+			fill(array);
+			break;
+		case 2:
+			display(array);
+			break;
+		case 3:
+			printf("Enter the index: ");
+			scanf("%d", &index);
+			element = getElement(array, index);
+			printf("Element at index %d: %d\n", index, element);
+			break;
+		case 4:
+			printf("Enter the index: ");
+			scanf("%d", &index);
+			printf("Enter the value: ");
+			scanf("%d", &element);
+			setElement(array, index, element);
+			printf("Element set\n");
+			break;
+		case 5:
+			size = getSize(array);
+			printf("Size of the array: %d\n", size);
+			break;
+		case 6:
+			length = get_length(array);
+			printf("Current number of elements in the array: %d\n", length);
+			break;
+		case 7:
+			printf("Enter the index: ");
+			scanf("%d", &index);
+			printf("Enter the element: ");
+			scanf("%d", &element);
+			result = insert(array, index, element);
+			if (result == -1)
+				printf("Error: Index out of bounds\n");
+			else
+				printf("Element inserted\n");
+			break;
+		case 8:
+			printf("Enter the index: ");
+			scanf("%d", &index);
+			result = delete(index, array);
+			if (result == -1)
+				printf("Error: Index out of bounds\n");
+			else
+				printf("Element deleted\n");
+			break;
+		case 9:
+			printf("Enter the element: ");
+			scanf("%d", &element);
+			result = append(element, array);
+			if (result == -1)
+				printf("Error: Array is full\n");
+			else
+				printf("Element appended\n");
+			break;
+		case 10:
+			printf("Enter the new size: ");
+			scanf("%d", &new_size);
+			array = Enlarge(array, new_size);
+			printf("Array enlarged\n");
+			break;
+		case 11:
+			printf("Enter the size of the first array: ");
+			scanf("%d", &size);
+			Array *arr1 = createArray(size);
+			fill(arr1);
+
+			printf("Enter the size of the second array: ");
+			scanf("%d", &size);
+			Array *arr2 = createArray(size);
+			fill(arr2);
+
+			Array *mergedArray = merge(arr1, arr2);
+			printf("Merged array: ");
+			display(mergedArray);
+			break;
+		case 12:
+			printf("Enter the element to search: ");
+			scanf("%d", &search_key);
+			result = search(array, search_key);
+			if (result == -1)
+				printf("Element not found in the array\n");
+			else
+				printf("Element found at index %d\n", result);
+			break;
+		case 0:
+			printf("Exiting program\n");
+			break;
+		default:
+			printf("Invalid choice\n");
+			break;
+		}
+	} while (choice != 0);
+
+	// Free the memory allocated for the array
+	free(array->arr);
+	free(array);
+
+	return (0);
 }
