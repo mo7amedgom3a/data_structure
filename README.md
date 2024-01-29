@@ -37,4 +37,5 @@ Ready to embark on your creamy journey into the world of Data Structures? Simply
 
 ```bash
 git clone https://github.com/mo7amedgom3a/data_structure.git
+cd data_structure
 
